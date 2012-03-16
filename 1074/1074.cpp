@@ -56,7 +56,7 @@ int main()
 
      //init
      for(i=0;i<15;i++)
-	  f[i]=(1<<i);
+	  flag[i]=(1<<i);
      //
 
      cin>>t;
@@ -69,10 +69,9 @@ int main()
 	       cin>>name[i]>>h[i].d>>h[i].c;
 	  }
 
-	  for(i=(1<<(n-1));i>0;i--)
+	  for(i=(1<<n);i>=0;i--)
 	       f[i]=0xfffffff;
-	  
-	  
+
 	  Min=0xfffffff;
 	  search(0,0,0,n,0,ans,has_used,Min);
 	  cout<<Min<<endl;
