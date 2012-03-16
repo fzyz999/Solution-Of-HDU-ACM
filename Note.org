@@ -1,0 +1,111 @@
+#+TITLE: OI学习笔记
+* 序
+  参加OI多年，我才发现自己的知识完全没有系统性，没有体系。知识胡乱地堆放在脑子里，做题时完全不知道该用哪些部分。这也是我写这些东西的初衷，整理自己所有的知识，仅此而已。
+* 许可协议
+  本笔记大部分摘自网络，所有文本均遵循其本身的许可协议。本笔记会标明出处。
+* STL
+** STL历史
+   STL系由Alexander Stepanov创造于1979年前后，这也正是比雅尼·斯特劳斯特鲁普创造C++的年代。
+   虽然David R. Musser于1971年开始即在计算机几何领域发展并倡导某些泛型程序设计观念，但早期并没有任何编程语言支持泛型程序设计。第一个支援泛型概念的语言是Ada。[来源请求] Alex和Musser曾于1987开发出一套相关的Ada library.
+   STL之设计人Stepanov早期从事教育工作，1970年代研究泛型程序设计，那时他与其同事一起在GE公司开发出一个新的程序语言——Tecton。
+   1983年，Stepanov先生转至Polytechnic大学教书，继续研究泛型程序设计，同时写了许多Scheme的程序，应用在graph与network的算法上，1985年又转至GE公司专门教授高阶程序设计，并将graph与network的Scheme程式，改用Ada写，用了Ada以后，他发现到一个动态（dynamically）类型的程序（如Scheme）与强制（strongly）类型的程序（如Ada）有多么的不同。
+   在动态类型的程序中，所有类型都可以自由的转换成别的类型，而强制类型的程序却不能。但是，强制类型在除错时较容易发现程序错误。
+   1988年Stepanov先生转至HP公司执行开发泛型程序库的工作。此时，他已经认识C语言中指针的威力，他表示一个程序员只要有些许硬件知识，就很容易接受C语言中指针的观念，同时也了解到C语言的所有数据结构均可以指针间接表示，这点是C与Ada、Scheme的最大不同。
+   Stepanov并认为，虽然C++中的继承功能可以表示泛型设计，但终究有个限制。虽然可以在基础类型（superclass）定义算法和接口，但不可能要求所有物件皆是继承这些，而且庞大的继承体系将减低虚拟（virtual）函数的执行效率，这便违反的前面所说的“效率”原则。
+   到了C++模版观念，Stepanov参加了许多有关的研讨会，与C++之父Bjarne讨论模版的设计细节。如，Stepanov认为C++的函数模版（function template）应该像Ada一样，在声明其函数原型后，应该显式的声明一个函数模版之实例（instance）；Bjarne则不然，他认为可以透过C++的重载（overloading）功能来表达。
+   Stepanov想像中的函数模版：
+   #+BEGIN_SRC C++ -n
+   in *.hpp
+   template<class T>
+   T square(T x) { return x*x; }
+   
+   in *.cpp
+   double square(double);
+   cout << square(3.3);
+   int square(int);
+   cout << square(3);
+   #+END_SRC
+
+   Bjarne认为的函数模版：
+   #+BEGIN_SRC C++ -n
+   in *.hpp
+   template<class T>
+   T square(T x) { return x*x; }
+   
+   in *.cpp
+   cout << square(3.3);
+   cout << square(3);
+   #+END_SRC
+   几经争辩，Stepanov发现Bjarne是对的（参考侯俊杰《STL讲座·第三章》）。事后Stepanov回想起来非常同意Bjarne的作法。
+   #+BEGIN_QUOTE
+   template 引数推导机制（arguments deduction ，在 STL中占非常重要的角色。Alexander Stepanov（STL 的创造者）在与Dr. Dobb's Journal进行的访谈中说道‘1992 我重回generic-library的开发工作。这时候C++有了template
+   我发现Bjarne完成了一个非常美妙的设计。之前我在Bell Lab曾参与数次template的相关设计讨论，并且非常粗暴地要求Bjarne应该将C++ template设计得尽可能像Ada generics那样。我想由于我的争辩是如此地粗暴，他决定反对。我了解到在C++中除了拥有template classes之外还拥有template functions的重要性。然而我认为template function应该像Ada generics一样，也就是说它们应该是显式实例，Bjarne没有听进我的话，他设计了一个template function机制，其中的template是以一个重载化机制 （overloading mechanism来进行隐式实例这项特殊的技术对我的工作具有关键性的影响，因为我发现它使我得以完成Ada不可能完成的许多动作。我非常高兴Bjarne当初没有听我的意见。’（DDJ 1995 年三月号）
+   #+END_QUOTE
+   事实上，C++的模版，本身即是一套复杂的宏语言（macro language），宏语言最大的特色为：所有工作在编译时期就已完成。显式的声明函数模版之实例，与直接透过C++的多载功能隐式声明，结果一样，并无很大区别，只是前者加重程序员的负担，使得程式变得累赘。
+   1992年Meng Lee加入Alex的专案，成为另一位主要贡献者。
+   1992年，HP泛型程序库计划结束，小组解散，只剩下Stepanov先生与Meng Lee小姐（她是东方人，STL的名称其实是取STepanov与Lee而来[来源请求]），Lee先前研究的是编译器的制作，对C++的模版很熟，第一版的STL中许多程式都是Lee的杰作。
+   1993年，Andy Koenig到斯坦福演讲，Stepanov便向他介绍STL，Koenig听后，随即邀请Stepanov参加1993年11月的ANSI/ISO C++标准化会议，并发表演讲。
+   Bell实验室的Andrew Koenig于1993年知道STL研究计划后，邀请Alex于是年11月的ANSI/ISO C++标准委员会会议上展示其观念。并获得与会者热烈的回应。
+   1994年1月6日，Koenig寄封电子邮件给Stepanov，表示如果Stepanov愿意将STL的说明文件撰写齐全，在1月25日前提出，便可能成为标准C++的一部份。Stepanov回信道："Andy, are you crazy?" 。 Koenig便说："Well, yes I am crazy,but why not try it?"。
+   Alex于是在次年夏天在Waterloo举行的会议前完成其正式的提案，并以百分之八十压倒性多数，一举让这个巨大的计划成为C++ Standard的一部份。
+   STL于1994年2月年正式成为ANSI/ISO C++的一部份，它的出现，促使C++程序员的思维方式更朝向泛型编程（generic program）发展。
+** STL内容
+*** Vector
+**** 简介
+vector 定义于 <vector> 头文件中。与其他STL元件一样，vector 属于std名称空间。
+vector是C++标准库里最基本的容器，大多数状况下都很有效率。vector设计之初即是为了改善C语言原生阵列的种种缺失与不便，而欲提供一种更有效、更安全的阵列。vector的的使用接口刻意模拟C语言原生阵列，较明显的差异在于内存管理，原生阵列必须在宣告阵列的时候明确指定阵列长度(例如 int a[5])，但是 vector 不需要指定，而是会在执行期依据状况自我调整长度，动态增大容量。
+vector的表现一如数据结构中的阵列，允许随机存取(Random Access)，以索引值(index)存取任一元素只要花费常数时间 O(1)，在集合尾端增加或删除元素也是花费常数时间O(1)，若在vector集合中间增加或删除元素时间复杂度是线性时间O(n)，较为费时。虽然C++标准并没有规定实作方式，但大多数 vector 内部均使用动态阵列方式实作。
+**** 操作
+     | 访问元素方法         |                                                                                                                       |
+     | vec[i]               | 访问索引值为 I 的元素引用。 (索引值从零起算)                                                                 |
+     | vec.AT(I)            | 访问索引值为 I 的元素的引用，以 AT() 访问会做数组边界检查，如果访问越界将会抛出一个例外，这是与OPERATOR[]的唯一差异。 |
+     | vec.FRONT()          | 回传 VECTOR 第一个元素的引用。                                                                                        |
+     | vec.BACK()           | 回传 VECTOR 最尾元素的引用。                                                                                          |
+     | 新增或移除元素的方法 |                                                                                                                       |
+     | vec.push_back()      | 新增元素至 vector 的尾端，必要时会进行存储器配置。                                                                    |
+     | vec.pop_back()       | 删除 vector 最尾端的元素。                                                                                            |
+     | vec.insert()         | 插入一个或多个元素至 vector 内的任意位置。                                                                            |
+     | vec.erase()          | 删除 vector 中一个或多个元素。                                                                                        |
+     | vec.clear()          | 清空所有元素。                                                                                                        |
+     | 取得长度/容量        |                                                                                                                       |
+     | vec.size()           | 取得 vector 目前持有的元素个数。                                                                                      |
+     | vec.empty()          | 如果 vector 内部为空，则传回 true 值。                                                                                |
+     | vec.capacity()       | 取得 vector 目前可容纳的最大元素个数。这个方法与存储器的配置有关，它通常只会增加，不会因为元素被删减而随之减少。      |
+     |                      |                                                                                                                       |
+     | 重新配置／重设长度   |                                                                                                                       |
+     | vec.reserve()        | 如有必要，可改变 vector 的容量大小（配置更多的存储器）。在众多的 STL 实做，容量只能增加，不可以减少。                 |
+     | vec.resize()         | 改变 vector 目前持有的元素个数。                                                                                      |
+     | 迭代 (Iterator)      |                                                                                                                       |
+     | vec.begin()          | 回传一个Iterator，它指向 vector 第一个元素。                                                                          |
+     | vec.end()            | 回传一个Iterator，它指向 vector 最尾端元素的下一个位置（请注意：它不是最末元素）。                                    |
+     | vec.rbegin()         | 回传一个反向Iterator，它指向 vector 最尾端元素的。                                                                    |
+     | vec.rend()           | 回传一个Iterator，它指向 vector 的第一个元素。                                                                        |
+     |                      |                                                                                                                       |
+     |                      |                                                                                                                       |
+*** List
+**** 简介
+list 被定义在 <list> 头文件中。如其他STL元件，list属于std名称空间。
+list 内部以数据结构的双向连结串行实现，内部元素并非放置于连续大块内存中，而是散落于内存各处，互相以link串接起来，每个元素都只知道其前一个元素以及下一个元素的位置。故要走访整个list，必须从第一个元素开始逐个往下寻访，不支持随机存取(Random Access)。 list 的强项是高效的插入以及删除，于list插入或删除时只需要改动元素的link字段，不需要搬动元素，代价相对便宜。
+list 在经常需要于集合内部任意位置(即除了头尾以外的其他位置) 频繁增删元素的工作上表现优秀。若仅需要于集合尾端增删元素，那应该优先考虑vector容器，若仅于头尾二端增删元素，那应该优先考虑deque容器。
+**** 操作
+    | 访问元素方法      |                                                 |
+    | list.begin()      | 回传指向第一个元素的 Iterator。                 |
+    | list.end()        | 回传指向最末元素的下一个位置的 Iterator。       |
+    | list.rbegin()     | 回传指向最末个元素的反向 Iterator。             |
+    | list.rend()       | 回传指向第一个元素的前一个位置的反向 Iterator。 |
+    |                   |                                                 |
+    | 取得长度/容量:    |                                                 |
+    | list.empty()      | 若list内部为空，则回传true值。                  |
+    | list.size()       | 回传list内实际的元素个数。                      |
+    | lsit.resize()     | 重新分派list的长度。                            |
+    |                   |                                                 |
+    | 访问元素          |                                                 |
+    | list.front()      | 存取第一个元素。                                |
+    | list.back()       | 存取最末个元素。                                |
+    |                   |                                                 |
+    | 修改元素          |                                                 |
+    | list.push_front() | 增加一个新的元素在 list 的前端。                |
+    | list.pop_front()  | 删除 list 的第一个元素。                        |
+    | list.push_back()  | 增加一个新的元素在 list 的尾端。                |
+    | list.pop_back()   | 删除 list 的最末个元素。                        |
+    |                   |                                                 |
