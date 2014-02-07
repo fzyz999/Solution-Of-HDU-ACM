@@ -1,0 +1,29 @@
+#include <iostream>
+#include <map>
+
+using namespace std;
+
+map<string,int> adt;
+
+int main()
+{
+  int n,tmp;
+  string str;
+
+  while(cin>>n)
+    {
+      adt.clear();
+      Max=0;
+
+      while(n--)
+	{
+	  cin>>str;
+	  tmp=++adt[str.find_first_not_of("0")];
+	  Max=Max>tmp?Max:tmp;
+	}
+      
+      cout<<Max<<endl;
+    }
+
+  return 0;
+}

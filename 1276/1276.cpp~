@@ -1,0 +1,42 @@
+#include <iostream>
+
+using namespace std;
+
+struct Node
+{
+     int num;
+     Node *next;
+     
+     Node(){next=NULL;}
+};
+
+int main()
+{
+     int n;
+
+     while(cin>>n)
+     {
+          Node* head;
+
+          head=new Node;
+          head->num=1;
+          for(i=0;i<n-1;i++)
+          {
+               head->next=new Node;
+               head=head->next;
+               head->num=i+2;
+          }
+          
+          while(n>3)
+          {
+               for(i=0;i<n;i++)
+               {
+                    if(i&1)
+                    {
+                         head
+                    }
+               }
+     }
+
+     return 0;
+}

@@ -1,0 +1,82 @@
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+class trie
+{
+     struct trie_node
+     {
+	  bool is_end;
+	  trie_node *next[26];
+	  trie_node()
+	       {
+		    is_end=false;
+		    for(int i=0;i<26;i++)
+			 next[i]=NULL;
+	       }
+	  void clear()
+	       {
+		    for(int i=0;i<26;i++)
+			 if(next[i]!=NULL)
+			 {
+			      next[i]->clear();
+			      delete next[i];
+			 }
+	       }
+     };
+
+     trie_node *root;
+public:
+     trie(){root=new trie_node;}
+     bool insert(char str[]);
+     void clear();
+};
+
+bool trie::insert(char str[])
+{
+     trie_node *tmp=root;
+     int i,l=strlen(str);
+
+     for(i=0;i<l;i++)
+	  if(tmp->next[str[i]-'a']==NULL)
+	  {
+	       tmp->next[str[i]-'a']=new trie_node;
+	       tmp=tmp->next[str[i]-'a'];
+	  }
+	  else
+	       tmp=tmp->next[str[i]-'a'];
+
+     if(tmp->is_end==true)
+	  return false;
+     tmp->is_end=true;
+
+     return true;
+}
+
+void trie::clear()
+{
+     root->clear();
+     root->is_end=false;
+     for(int i=0;i<26;i++)
+	  root->next[i]=NULL;
+}
+
+int main()
+{
+     trie dic;
+     char word[1000];
+     int s;
+
+     for(;;)
+     {
+	  s=0;
+	  dic.clear();
+	  while(cin>>word && strcmp(word,"#")!=0)
+	       s+=(int)dic.insert(word);
+      
+	  cout<<s<<endl;
+     }
+
+     return 0;
+}

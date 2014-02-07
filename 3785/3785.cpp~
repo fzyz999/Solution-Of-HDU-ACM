@@ -1,0 +1,46 @@
+#include <iostream>
+
+using namespace std;
+
+int a[100001];
+
+void Sort(int a[],int low,int high)
+{
+     if(low<high)
+     {
+          int v=a[low],i=low,j=high;
+          while(i<j)
+          {
+               while(i<j && v>=a[j]) j--;
+               a[i]=a[j];
+               while(i<j && v<=a[i]) i++;
+               a[j]=a[i];
+          }
+          a[i]=v;
+          Sort(low,i-1);
+          if(m>i)
+               Sort(i+1,high);
+     }
+     
+     return ;
+}
+
+int main()
+{
+     int n,m,i;
+
+     while(cin>>n>>m && (n!=0||m!=0))
+     {
+          for(i=0;i<n;i++)
+               cin>>a[i];
+
+          Sort(a,0,n-1);
+
+          cout<<a[0];
+          for(i=1;i<n;i++)
+               cout<<' '<<a[i];
+          cout<<endl;
+     }
+
+     return 0;
+}

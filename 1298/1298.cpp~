@@ -1,0 +1,76 @@
+#include <iostream>
+
+using namespace std;
+
+class trie
+{
+     struct trie_node
+     {
+          int probability;
+          char *p_str;
+          trie_node *next[10];
+          trie_node()
+               {
+                    probability=0;
+                    p_str=NULL;
+                    for(int i=0;i<10;i++)
+                         next[i]=NULL;
+               }
+          void clear()
+               {
+                    for(int i=0;i<10;i++)
+                         if(next[i]!=NULL)
+                         {
+                              next[i]->clear();
+                              delete next[i];
+                              next[i]=NULL;
+                         }
+               }
+     };
+
+     trie_node *root;
+public:
+     trie();
+     void insert(char str[]);
+     void find(char input[]);
+     void clear();
+};
+
+inline trie::trie()
+{
+     root=new trie_node;
+}
+
+inline void trie::clear()
+{
+     root->clear();
+}
+
+inline void trie::insert(char *str)
+{
+     char *tmp;
+     for(tmp=str;*tmp!=0;tmp++)
+     {
+          
+     }
+     return ;
+}
+
+int main()
+{
+     int t,i;
+
+     cin>>t;
+     while(t--)
+     {
+          
+     }
+          
+     return 0;
+}
+
+
+
+
+
+

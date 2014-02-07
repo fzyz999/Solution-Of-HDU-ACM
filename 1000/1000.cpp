@@ -6,9 +6,10 @@ int a,b;
 
 int main()
 {
-   while (cin >>a>>b)
-   {
-       cout<<a+b<<endl;
-   }
-   return 0;
+     while (cin >>a>>b)
+     {
+          cout<<a+b<<endl;
+          
+     }
+     return 0;
 }

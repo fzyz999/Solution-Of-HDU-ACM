@@ -1,0 +1,21 @@
+#include <iostream>
+
+using namespace std;
+
+int catalan[36];
+
+int main()
+{
+     catalan[0]=1;
+     for(i=1;i<36;i++)
+          catalan[i]=catalan[i-1]*((n<<2)-2)/(n+1);
+
+     for(i=0;i<36;i++)
+          catalan[i]<<=1;
+
+     register int n,i=1;
+     while(cin>>n&&n!=-1)
+          cout<<i++<<' '<<n<<' '<<catalan[n]<<endl;
+     
+     return 0;
+}
