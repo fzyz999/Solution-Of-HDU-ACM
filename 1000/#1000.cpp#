@@ -3,12 +3,19 @@
 using namespace std;
 
 int a,b;
+struct Node
+{
+    int x,y;
+};
 
 int main()
 {
-   while (cin >>a>>b)
-   {
-       cout<<a+b<<endl;
-   }
-   return 0;
+    Node a;
+    a.x
+     while (cin >>a>>b)
+     {
+          cout<<a+b<<endl;
+          
+     }
+     return 0;
 }
