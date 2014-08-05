@@ -1,0 +1,32 @@
+#include <cstdio>
+#include <cstdlib>
+
+#define MAX_N 5010
+#define LSON(X) (X<<1)
+#define RSON(X) ((X<<1)+1)
+
+struct Node
+{
+    int l,r;
+    int sum;
+};
+
+Node sgt[MAX_N<<1];
+
+void build(int root,int l,int r)
+{
+    sgt[root].l=l;
+    sgt[root].r=r;
+    sgt[root].sum=0;
+    if(l!=r)
+    {
+	build(LSON(root),l,(l+r)>>1);
+	build(RSON(root), ((l+r)>>1)+1, r);
+    }
+}
+
+int main()
+{
+    
+    return 0;
+}
